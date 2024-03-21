@@ -1,12 +1,19 @@
-<script setup></script>
+<script>
+export default {
+  props: {
+    imageUrl: String,
+    id: Number,
+  },
+}
+</script>
 
 <template>
-  <RouterLink to="">
+  <router-link :to="'/movie/' + id">
     <div class="overflow-hidden rounded-xl">
       <img
-        src="https://image.tmdb.org/t/p/original//2Fja87aTeuXxTEI1MH2IuHHSsLq.jpg"
+        :src="'https://image.tmdb.org/t/p/original/' + imageUrl"
         class="object-cover"
       />
     </div>
-  </RouterLink>
+  </router-link>
 </template>
