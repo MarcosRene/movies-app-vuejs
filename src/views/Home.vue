@@ -7,9 +7,9 @@ import { API_KEY } from '../constants'
 
 const movies = ref([])
 
-async function fetchMoviesData() {
+async function fetchAllMoviesData() {
   const response = await fetch(
-    `https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}&language=pt-BR`
   )
 
   const data = await response.json()
@@ -19,7 +19,7 @@ async function fetchMoviesData() {
   }))
 }
 
-onMounted(() => fetchMoviesData())
+onMounted(() => fetchAllMoviesData())
 </script>
 
 <template>
