@@ -1,7 +1,94 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { PhHeart, PhPlay } from "@phosphor-icons/vue";
+
+import { API_KEY } from '../constants'
+
+const { params } = useRoute()
+const { id: movieId } = params
+
+const movie = ref({})
+
+function formatAverage(avarage) {
+  return avarage?.toFixed(1)
+}
+
+async function fetchMovieById() {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=pt-BR`
+  )
+
+  const data = await response.json()
+  movie.value = {
+    ...data,
+    backdrop_path: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
+    vote_average: formatAverage(data.vote_average),
+  }
+}
+
+onMounted(() => fetchMovieById())
+</script>
 
 <template>
-  <div>
-    <h1>Details Page</h1>
-  </div>
+  <section
+    class="h-screen bg-cover bg-no-repeat [background-position:center] md:[background-position:top]"
+    :style="{
+      backgroundImage:
+        'linear-gradient(to right, black, rgba(0, 0, 0, 0.5)), url(' +
+        movie?.backdrop_path +
+        ')',
+    }"
+  >
+    <div class="h-full py-32 px-8 flex items-center justify-start z-10">
+      <div class="flex flex-col gap-6">
+        <div class="max-w-screen-sm flex flex-col gap-10">
+          <h1 class="text-5xl font-extrabold">{{ movie.title }}</h1>
+
+          <div class="text-zinc-400 flex items-center gap-2">
+            <span
+              >{{
+                new Date(movie.release_date).toLocaleString('pt-BR', {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                })
+              }} </span
+            >
+            | <span class="text-green-600 font-bold">{{ movie.vote_average }}</span>
+            | <span>{{ movie.runtime + ' min' }}</span>
+          </div>
+
+          <p v-if="movie.overview">{{ movie.overview }}</p>
+
+          <div
+            className="flex flex-col md:flex-row md:justify-between md:items-start"
+          >
+            <ul
+              class="max-w-[200px] grid grid-cols-2 gap-x-8 order-2 md:order-1"
+            >
+              <li v-for="genre in movie.genres">
+                <span class="text-zinc-400">{{ genre.name }}</span>
+              </li>
+            </ul>
+
+            <div className="mb-8 flex gap-4 order-1 md:mb-0 md:order-2">
+              <button
+                class="min-w-28 size-12 font-medium rounded-lg bg-red-600 flex items-center justify-center gap-2 hover:bg-red-700 transition-all hover:scale-95"
+              >
+                <PhPlay :size="18" weight="fill" />
+                <span>Trailer</span>
+              </button>
+              <button
+                class="min-w-28 size-12 font-medium rounded-lg border-2 border-white bg-transparent flex items-center justify-center gap-2 transition-all hover:scale-95"
+              >
+                <PhHeart :size="18" weight="fill" />
+                <span>Salvar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>

@@ -2,25 +2,45 @@
 
 <template>
   <header
-    class="h-20 px-8 bg-zinc-800 flex items-center justify-evenly md:justify-between"
+    class="h-20 px-8 border-b-[1px] border-gray-50/[0.06] flex items-center justify-evenly md:justify-between fixed inset-0 z-10 backdrop-blur-xl"
   >
-    <img
-      src="./assets/logo.svg"
-      alt="Movies App Logo"
-      class="hidden w-20 md:block"
-    />
+    <router-link to="/">
+      <img
+        src="./assets/logo.svg"
+        alt="Movies App Logo"
+        class="hidden w-20 md:block"
+      />
+    </router-link>
 
     <nav class="flex gap-6">
-      <router-link to="/" class="text-zinc-100">Home</router-link>
-      <router-link to="/movies" class="text-zinc-100">Filmes</router-link>
-      <router-link to="/series" class="">Séries</router-link>
-      <router-link to="/favorites" class="text-zinc-100 underline"
+      <router-link
+        to="/"
+        class="text-zinc-100"
+        active-class="text-red-500 font-semibold"
+        >Home</router-link
+      >
+      <router-link
+        to="/movies"
+        class="text-zinc-100"
+        active-class="text-red-500 font-semibold"
+        >Filmes</router-link
+      >
+      <router-link
+        to="/series"
+        class="text-zinc-100"
+        active-class="text-red-500 font-semibold"
+        >Séries</router-link
+      >
+      <router-link
+        to="/favorites"
+        class="text-zinc-100 underline"
+        active-class="text-red-500 font-semibold"
         >Favoritos</router-link
       >
     </nav>
   </header>
 
-  <main class="px-8 py-10">
+  <main>
     <router-view />
   </main>
 </template>
