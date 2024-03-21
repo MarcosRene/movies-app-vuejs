@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-  movie: {
+  serie: {
     type: Object,
     required: true,
   }
@@ -8,9 +8,9 @@ defineProps({
 </script>
 
 <template>
-  <router-link :to="'/movie/' + movie?.id">
+  <router-link :to="'/serie/' + serie?.id">
     <div class="overflow-hidden rounded-xl">
-      <img :src="movie?.poster_path" class="object-cover" />
+      <img :src="serie?.poster_path" class="object-cover" />
     </div>
   </router-link>
 </template>

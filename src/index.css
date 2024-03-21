@@ -5,5 +5,6 @@
 @layer utilities {
     .active-link {
       color: #dc2626;
+      font-weight: 700;
     }
   }

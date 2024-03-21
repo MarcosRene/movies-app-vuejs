@@ -16,25 +16,25 @@
       <router-link
         to="/"
         class="text-zinc-100"
-        active-class="active-link font-semibold"
+        active-class="active-link"
         >Home</router-link
       >
       <router-link
         to="/movies"
         class="text-zinc-100"
-        active-class="active-link font-semibold"
+        active-class="active-link"
         >Filmes</router-link
       >
       <router-link
         to="/series"
         class="text-zinc-100"
-        active-class="active-link font-semibold"
+        active-class="active-link"
         >Séries</router-link
       >
       <router-link
         to="/favorites"
         class="text-zinc-100 underline"
-        active-class="active-link font-semibold"
+        active-class="active-link"
         >Favoritos</router-link
       >
     </nav>

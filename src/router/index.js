@@ -5,6 +5,7 @@ const Movies = () => import('../views/Movies.vue')
 const Series = () => import('../views/Series.vue')
 const Favorites = () => import('../views/Favorites.vue')
 const Details = () => import('../views/Details.vue')
+const SeriesDetails = () => import('../views/SeriesDetails.vue')
 
 const routes = [
   { path: '/', component: Home },
@@ -12,6 +13,7 @@ const routes = [
   { path: '/series', component: Series },
   { path: '/favorites', component: Favorites },
   { path: '/movie/:id', component: Details },
+  { path: '/serie/:id', component: SeriesDetails },
 ]
 
 const router = createRouter({

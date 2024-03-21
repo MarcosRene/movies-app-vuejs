@@ -7,28 +7,30 @@ import { API_KEY } from '../constants'
 
 const { params } = useRoute()
 
-const { id: movieId } = params
+const { id: serieId } = params
 
-const movie = ref({})
+const serie = ref({})
 
 function formatAverage(avarage) {
   return avarage?.toFixed(1)
 }
 
-async function fetchMovieById() {
+async function fetchSerieById() {
   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=pt-BR`
+    `https://api.themoviedb.org/3/tv/${serieId}?api_key=${API_KEY}&language=pt-BR`
   )
 
   const data = await response.json()
-  movie.value = {
+  serie.value = {
     ...data,
     backdrop_path: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
     vote_average: formatAverage(data.vote_average),
   }
+
+  console.log(serie.value)
 }
 
-onMounted(() => fetchMovieById())
+onMounted(() => fetchSerieById())
 </script>
 
 <template>
@@ -44,23 +46,23 @@ onMounted(() => fetchMovieById())
     <div class="h-full py-32 px-8 flex items-center justify-start z-10">
       <div class="flex flex-col gap-6">
         <div class="max-w-screen-sm flex flex-col gap-10">
-          <h1 class="text-5xl font-extrabold">{{ movie.title }}</h1>
+          <h1 class="text-5xl font-extrabold">{{ serie?.name }}</h1>
 
           <div class="text-zinc-400 flex items-center gap-2">
             <span
               >{{
-                new Date(movie.release_date).toLocaleString('pt-BR', {
+                new Date(serie.first_air_date).toLocaleString('pt-BR', {
                   year: 'numeric',
                   month: 'numeric',
                   day: 'numeric',
                 })
               }} </span
             >
-            | <span class="text-green-600 font-bold">{{ movie.vote_average }}</span>
-            | <span>{{ movie.runtime + ' min' }}</span>
+            | <span class="text-green-600 font-bold">{{ serie.vote_average }}</span>
+            | <span v-for="serie in serie.episode_run_time">{{ serie + ' min' }}</span>
           </div>
 
-          <p v-if="movie.overview">{{ movie.overview }}</p>
+          <p v-if="serie.overview">{{ serie.overview }}</p>
 
           <div
             className="flex flex-col md:flex-row md:justify-between md:items-start"
@@ -68,7 +70,7 @@ onMounted(() => fetchMovieById())
             <ul
               class="max-w-[200px] grid grid-cols-2 gap-x-8 order-2 md:order-1"
             >
-              <li v-for="genre in movie.genres">
+              <li v-for="genre in serie.genres">
                 <span class="text-zinc-400">{{ genre.name }}</span>
               </li>
             </ul>
