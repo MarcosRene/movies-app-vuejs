@@ -1,29 +1,41 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+import Loader from '../components/Loader.vue'
 import SeriesCard from '../components/SeriesCard.vue'
 
 import { API_KEY } from '../constants'
 
 const series = ref([])
+const isLoading = ref(false)
 
 async function fetchMoviesTvData() {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=pt-BR`
-  )
+  try {
+    isLoading.value = true
 
-  const data = await response.json()
-  series.value = data.results.map((item) => ({
-    ...item,
-    poster_path: `https://image.tmdb.org/t/p/original${item.poster_path}`,
-  }))
+    const response = await fetch(
+      `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=pt-BR`
+    )
+
+    const data = await response.json()
+    series.value = data.results.map((item) => ({
+      ...item,
+      poster_path: `https://image.tmdb.org/t/p/original${item.poster_path}`,
+    }))
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 onMounted(() => fetchMoviesTvData())
 </script>
 
 <template>
-  <section class="py-32 px-8">
+  <Loader v-if="isLoading" />
+
+  <section v-else="!isLoading" class="py-32 px-8">
     <ul class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
       <li
         v-for="serie in series"
@@ -35,5 +47,3 @@ onMounted(() => fetchMoviesTvData())
     </ul>
   </section>
 </template>
-
-

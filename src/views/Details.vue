@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { PhHeart, PhPlay } from "@phosphor-icons/vue";
 
+import Loader from '../components/Loader.vue'
+
 import { API_KEY } from '../constants'
 
 const { params } = useRoute()
@@ -10,21 +12,30 @@ const { params } = useRoute()
 const { id: movieId } = params
 
 const movie = ref({})
+const isLoading = ref(false)
 
 function formatAverage(avarage) {
   return avarage?.toFixed(1)
 }
 
 async function fetchMovieById() {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=pt-BR`
-  )
+  try {
+    isLoading.value = true
+    
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=pt-BR`
+    )
 
-  const data = await response.json()
-  movie.value = {
-    ...data,
-    backdrop_path: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
-    vote_average: formatAverage(data.vote_average),
+    const data = await response.json()
+    movie.value = {
+      ...data,
+      backdrop_path: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
+      vote_average: formatAverage(data.vote_average),
+    } 
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -32,7 +43,10 @@ onMounted(() => fetchMovieById())
 </script>
 
 <template>
+  <Loader v-if="isLoading" />
+
   <section
+    v-else="!isLoading"
     class="h-screen bg-cover bg-no-repeat [background-position:center] md:[background-position:top]"
     :style="{
       backgroundImage:
