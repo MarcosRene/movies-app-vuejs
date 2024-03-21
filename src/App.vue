@@ -1,8 +1,14 @@
 <script setup></script>
 
 <template>
-  <header class="h-20 px-8 bg-zinc-800 flex items-center justify-between">
-    <img src="./assets/logo.svg" alt="Movies App Logo" class="w-20" />
+  <header
+    class="h-20 px-8 bg-zinc-800 flex items-center justify-evenly md:justify-between"
+  >
+    <img
+      src="./assets/logo.svg"
+      alt="Movies App Logo"
+      class="hidden w-20 md:block"
+    />
 
     <nav class="flex gap-6">
       <router-link to="/" class="text-zinc-100">Home</router-link>
