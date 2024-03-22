@@ -60,20 +60,23 @@ function getAllFavoritesMovies() {
 
 async function handleFavoriteMovieSave() {
   try {
-    const newFavoritesMoviesList = [
-      ...favoritesMoviesList.value,
-      movie.value
-    ]
+    const movieAlreadExists = favoritesMoviesList.value.some(favoriteMovie => favoriteMovie.id === movie.value.id);
 
-   localStorage.setItem('@moviesapp:movies', JSON.stringify(newFavoritesMoviesList))
-   toast.success('Adicionado(a) a sua lista de favoritos.')
+    if (movieAlreadExists) {
+      return toast.warning('Já está na sua lista de favoritos.');
+    }
+
+    favoritesMoviesList.value = [...favoritesMoviesList.value, movie.value];
+
+    localStorage.setItem('@moviesapp:movies', JSON.stringify(favoritesMoviesList.value));
+    toast.success('Adicionado(a) à sua lista de favoritos.');
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 }
 
 onMounted(() => {
-  fetchMovieById()
+  fetchMovieById(),
   getAllFavoritesMovies()
 })
 </script>

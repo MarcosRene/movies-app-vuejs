@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { toast } from 'vue3-toastify';
 import { PhHeart, PhPlay } from '@phosphor-icons/vue'
 
 import Loader from '../components/Loader.vue'
@@ -13,6 +14,7 @@ const { id: serieId } = params
 
 const serie = ref({})
 const isLoading = ref(false)
+const favoritesSeriesList = ref([])
 
 function formatAverage(avarage) {
   return avarage?.toFixed(1)
@@ -39,7 +41,51 @@ async function fetchSerieById() {
   }
 }
 
-onMounted(() => fetchSerieById())
+function getAllFavoritesSeries() {
+  try {
+    const favoritesSeries = localStorage.getItem('@moviesapp:movies')
+
+    if (favoritesSeries) {
+      const formattedFavoritesSeries = JSON.parse(favoritesSeries)?.map(
+        (movie) => ({
+          ...movie,
+          poster_path: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
+        })
+      )
+
+      favoritesSeriesList.value = formattedFavoritesSeries || []
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function handleFavoriteMovieSave() {
+  try {
+    const serieAlreadExists = favoritesSeriesList.value.some(
+      (favoriteMovie) => favoriteMovie.id === serie.value.id
+    )
+
+    if (serieAlreadExists) {
+      return toast.warning('Já está na sua lista de favoritos.')
+    }
+
+    favoritesSeriesList.value = [...favoritesSeriesList.value, serie.value]
+
+    localStorage.setItem(
+      '@moviesapp:movies',
+      JSON.stringify(favoritesSeriesList.value)
+    )
+    toast.success('Adicionado(a) à sua lista de favoritos.')
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+onMounted(() => {
+  fetchSerieById(), 
+  getAllFavoritesSeries()
+})
 </script>
 
 <template>
@@ -55,7 +101,9 @@ onMounted(() => fetchSerieById())
         ')',
     }"
   >
-    <div class="h-full py-32 px-8 flex items-center justify-start z-10 animate-slider-right-to-left">
+    <div
+      class="h-full py-32 px-8 flex items-center justify-start z-10 animate-slider-right-to-left"
+    >
       <div class="flex flex-col gap-6">
         <div class="max-w-screen-sm flex flex-col gap-10">
           <h1 class="text-5xl font-extrabold">{{ serie?.name }}</h1>
@@ -104,7 +152,7 @@ onMounted(() => fetchSerieById())
                 class="min-w-28 size-12 font-medium rounded-lg border-2 border-white bg-transparent flex items-center justify-center gap-2 transition-all hover:scale-95"
               >
                 <PhHeart :size="18" weight="fill" />
-                <span>Salvar</span>
+                <span @click="handleFavoriteMovieSave">Salvar</span>
               </button>
             </div>
           </div>
