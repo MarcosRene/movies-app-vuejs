@@ -1,7 +1,30 @@
-# Vue 3 + Vite
+<img src="https://github.com/MarcosRene/movies-app-vuejs/assets/42222582/0f13aebe-0da8-42d4-b4ae-f3e2b790ac0f" alt="Movies app cover"/>
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+# Movies App 🎞️
 
-## Recommended IDE Setup
+Uma plataforma de streaming que permite visualizar filmes e séries, além de possibilitar a personalização de uma lista de favoritos para salvar seus conteúdos preferidos.
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
+## Ferramentas ⚒️
+
+- [Vuejs](https://vuejs.org/)
+- [Vue Router V4](https://router.vuejs.org/)
+- [Tailwincss](https://tailwindcss.com/)
+- [TMDB](https://www.themoviedb.org/)
+
+## Rodar a aplicão ⚠️
+
+```bash
+# Faça download da aplicação na sua máquina
+git clone https://github.com/MarcosRene/movies-app-vuejs.git
+
+# Entre na plasta da aplicação, por exemplo:
+cd documentos/movies-app-vuejs
+
+# Instale as dependências utilizando o gereneciador de pacotes que perfirir, por exemplo:
+npm install
+
+# Por fim, execute a aplicação
+npm run dev
+```
+
+> Nota: A aplicação não conta com recursos de assistir trailer e de paginação.
