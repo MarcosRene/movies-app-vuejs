@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { PhHeart, PhPlay } from "@phosphor-icons/vue";
+import { toast } from 'vue3-toastify';
+import { PhHeart, PhPlay } from '@phosphor-icons/vue'
 
 import Loader from '../components/Loader.vue'
 
@@ -13,6 +14,7 @@ const { id: movieId } = params
 
 const movie = ref({})
 const isLoading = ref(false)
+const favoritesMoviesList = ref([])
 
 function formatAverage(avarage) {
   return avarage?.toFixed(1)
@@ -21,7 +23,7 @@ function formatAverage(avarage) {
 async function fetchMovieById() {
   try {
     isLoading.value = true
-    
+
     const response = await fetch(
       `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=pt-BR`
     )
@@ -31,7 +33,7 @@ async function fetchMovieById() {
       ...data,
       backdrop_path: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
       vote_average: formatAverage(data.vote_average),
-    } 
+    }
   } catch (error) {
     console.error(error)
   } finally {
@@ -39,7 +41,41 @@ async function fetchMovieById() {
   }
 }
 
-onMounted(() => fetchMovieById())
+function getAllFavoritesMovies() {
+  try {
+    const favoritesMovies = localStorage.getItem('@moviesapp:movies')
+
+    if (favoritesMovies) {
+      const formattedFavoritesMovies = JSON.parse(favoritesMovies)?.map(movie => ({
+        ...movie,
+        poster_path: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
+      }))
+
+      favoritesMoviesList.value = formattedFavoritesMovies || []
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function handleFavoriteMovieSave() {
+  try {
+    const newFavoritesMoviesList = [
+      ...favoritesMoviesList.value,
+      movie.value
+    ]
+
+   localStorage.setItem('@moviesapp:movies', JSON.stringify(newFavoritesMoviesList))
+   toast.success('Adicionado(a) a sua lista de favoritos.')
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+onMounted(() => {
+  fetchMovieById()
+  getAllFavoritesMovies()
+})
 </script>
 
 <template>
@@ -55,7 +91,9 @@ onMounted(() => fetchMovieById())
         ')',
     }"
   >
-    <div class="h-full py-32 px-8 flex items-center justify-start z-10 animate-slider-right-to-left">
+    <div
+      class="h-full py-32 px-8 flex items-center justify-start z-10 animate-slider-right-to-left"
+    >
       <div class="flex flex-col gap-6">
         <div class="max-w-screen-sm flex flex-col gap-10">
           <h1 class="text-5xl font-extrabold">{{ movie.title }}</h1>
@@ -68,9 +106,12 @@ onMounted(() => fetchMovieById())
                   month: 'numeric',
                   day: 'numeric',
                 })
-              }} </span
-            >
-            | <span class="text-green-600 font-bold">{{ movie.vote_average }}</span>
+              }}
+            </span>
+            |
+            <span class="text-green-600 font-bold">{{
+              movie.vote_average
+            }}</span>
             | <span>{{ movie.runtime + ' min' }}</span>
           </div>
 
@@ -98,7 +139,7 @@ onMounted(() => fetchMovieById())
                 class="min-w-28 size-12 font-medium rounded-lg border-2 border-white bg-transparent flex items-center justify-center gap-2 transition-all hover:scale-95"
               >
                 <PhHeart :size="18" weight="fill" />
-                <span>Salvar</span>
+                <span @click="handleFavoriteMovieSave">Salvar</span>
               </button>
             </div>
           </div>

@@ -40,7 +40,6 @@ onMounted(() => fetchAllMoviesData())
       <li
         v-for="movie in movies"
         :key="movie.id"
-        class="transition-transform transform hover:-translate-y-2"
       >
         <Card :movie="movie" />
       </li>
