@@ -33,7 +33,7 @@ async function fetchSerieById() {
       ...data,
       backdrop_path: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
       vote_average: formatAverage(data.vote_average),
-    }
+    }    
   } catch (error) {
     console.error(error)
   } finally {
