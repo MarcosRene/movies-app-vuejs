@@ -2,11 +2,16 @@
 import { PhTrashSimple } from '@phosphor-icons/vue'
 
 function generateLink(movie) {
-  if (movie.media_type === 'movie') {
+  if (!movie?.media_type) {
     return '/movie/' + movie.id
   }
-  
-  return '/serie/' + movie.id
+
+  const mediaType = {
+    movie: '/movie/' + movie.id,
+    tv: '/serie/' + movie.id
+  }
+
+  return mediaType[movie.media_type]
 }
 
 defineProps({
