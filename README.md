@@ -4,6 +4,8 @@
 
 Uma plataforma de streaming que permite visualizar filmes e séries, além de possibilitar a personalização de uma lista de favoritos para salvar seus conteúdos preferidos.
 
+Link para visualização da aplicação: https://movies-app-vuejs-marcosrene.vercel.app/
+
 ## Ferramentas ⚒️
 
 - [Vuejs](https://vuejs.org/)
