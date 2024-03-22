@@ -55,7 +55,7 @@ onMounted(() => fetchMovieById())
         ')',
     }"
   >
-    <div class="h-full py-32 px-8 flex items-center justify-start z-10">
+    <div class="h-full py-32 px-8 flex items-center justify-start z-10 animate-slider-right-to-left">
       <div class="flex flex-col gap-6">
         <div class="max-w-screen-sm flex flex-col gap-10">
           <h1 class="text-5xl font-extrabold">{{ movie.title }}</h1>
