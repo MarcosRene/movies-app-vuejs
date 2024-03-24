@@ -12,7 +12,7 @@ const app = createApp(App)
 app.use(router)
 app.use(Vue3Toastify, {
   position: toast.POSITION.BOTTOM_CENTER,
-  theme: 'colored',
+  theme: toast.THEME.COLORED,
   timeout: 3000,    
   icon: false
 })

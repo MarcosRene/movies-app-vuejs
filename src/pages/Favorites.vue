@@ -58,7 +58,7 @@ onMounted(() => getAllFavoritesMovies())
       class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4"
     >
       <li v-for="favoriteMovie in favoritesMoviesList" :key="favoriteMovie.id">
-        <Card :movie="favoriteMovie" :on-remove="handleFavoreMovieRemove" />
+        <Card :data="favoriteMovie" :on-remove="handleFavoreMovieRemove" />
       </li>
     </ul>
 

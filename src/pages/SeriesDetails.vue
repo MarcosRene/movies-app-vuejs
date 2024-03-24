@@ -10,30 +10,30 @@ import { API_KEY } from '../constants'
 
 const { params } = useRoute()
 
-const { id: movieId } = params
+const { id: serieId } = params
 
-const movie = ref({})
+const serie = ref({})
 const isLoading = ref(false)
-const favoritesMoviesList = ref([])
+const favoritesSeriesList = ref([])
 
 function formatAverage(avarage) {
   return avarage?.toFixed(1)
 }
 
-async function fetchMovieById() {
+async function fetchSerieById() {
   try {
     isLoading.value = true
 
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=pt-BR`
+      `https://api.themoviedb.org/3/tv/${serieId}?api_key=${API_KEY}&language=pt-BR`
     )
 
     const data = await response.json()
-    movie.value = {
+    serie.value = {
       ...data,
       backdrop_path: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
       vote_average: formatAverage(data.vote_average),
-    }
+    }    
   } catch (error) {
     console.error(error)
   } finally {
@@ -41,43 +41,56 @@ async function fetchMovieById() {
   }
 }
 
-function getAllFavoritesMovies() {
+function getAllFavoritesSeries() {
   try {
-    const favoritesMovies = localStorage.getItem('@moviesapp:movies')
+    const favoritesSeries = localStorage.getItem('@moviesapp:movies')
 
-    if (favoritesMovies) {
-      const formattedFavoritesMovies = JSON.parse(favoritesMovies)?.map(movie => ({
-        ...movie,
-        poster_path: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
-      }))
+    if (favoritesSeries) {
+      const formattedFavoritesSeries = JSON.parse(favoritesSeries)?.map(
+        (serie) => ({
+          ...serie,
+          poster_path: `https://image.tmdb.org/t/p/original${serie.poster_path}`,
+        })
+      )
 
-      favoritesMoviesList.value = formattedFavoritesMovies || []
+      favoritesSeriesList.value = formattedFavoritesSeries || []
     }
   } catch (error) {
     console.error(error)
   }
 }
 
-async function handleFavoriteMovieSave() {
+async function handleFavoriteSerieSave() {
   try {
-    const movieAlreadExists = favoritesMoviesList.value.some(favoriteMovie => favoriteMovie.id === movie.value.id);
-
-    if (movieAlreadExists) {
-      return toast.warning('Já está na sua lista de favoritos.');
+    const serieToAdd = {
+      ...serie.value,
+      media_type: 'tv',
     }
 
-    favoritesMoviesList.value = [...favoritesMoviesList.value, movie.value];
+    const serieAlreadyExists = favoritesSeriesList.value.some(
+      (favoriteSerie) => favoriteSerie.id === serieToAdd.id
+    )
 
-    localStorage.setItem('@moviesapp:movies', JSON.stringify(favoritesMoviesList.value));
-    toast.success('Adicionado(a) à sua lista de favoritos.');
+    if (serieAlreadyExists) {
+      return toast.warning('Já está na sua lista de favoritos.')
+    }
+
+    favoritesSeriesList.value.push(serieToAdd)
+
+    localStorage.setItem(
+      '@moviesapp:movies',
+      JSON.stringify(favoritesSeriesList.value)
+    )
+
+    toast.success('Adicionado(a) à sua lista de favoritos.')
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
 
 onMounted(() => {
-  fetchMovieById(),
-  getAllFavoritesMovies()
+  fetchSerieById(), 
+  getAllFavoritesSeries()
 })
 </script>
 
@@ -90,7 +103,7 @@ onMounted(() => {
     :style="{
       backgroundImage:
         'linear-gradient(to right, black, rgba(0, 0, 0, 0.5)), url(' +
-        movie?.backdrop_path +
+        serie?.backdrop_path +
         ')',
     }"
   >
@@ -99,12 +112,12 @@ onMounted(() => {
     >
       <div class="flex flex-col gap-6">
         <div class="max-w-screen-sm flex flex-col gap-10">
-          <h1 class="text-5xl font-extrabold">{{ movie.title }}</h1>
+          <h1 class="text-5xl font-extrabold">{{ serie?.name }}</h1>
 
           <div class="text-zinc-400 flex items-center gap-2">
             <span
               >{{
-                new Date(movie.release_date).toLocaleString('pt-BR', {
+                new Date(serie.first_air_date).toLocaleString('pt-BR', {
                   year: 'numeric',
                   month: 'numeric',
                   day: 'numeric',
@@ -113,12 +126,15 @@ onMounted(() => {
             </span>
             |
             <span class="text-green-600 font-bold">{{
-              movie.vote_average
+              serie.vote_average
             }}</span>
-            | <span>{{ movie.runtime + ' min' }}</span>
+            |
+            <span v-for="serie in serie.episode_run_time">{{
+              serie + ' min'
+            }}</span>
           </div>
 
-          <p v-if="movie.overview">{{ movie.overview }}</p>
+          <p v-if="serie.overview">{{ serie.overview }}</p>
 
           <div
             className="flex flex-col md:flex-row md:justify-between md:items-start"
@@ -126,7 +142,7 @@ onMounted(() => {
             <ul
               class="max-w-[200px] grid grid-cols-2 gap-x-8 order-2 md:order-1"
             >
-              <li v-for="genre in movie.genres">
+              <li v-for="genre in serie.genres">
                 <span class="text-zinc-400">{{ genre.name }}</span>
               </li>
             </ul>
@@ -142,7 +158,7 @@ onMounted(() => {
                 class="min-w-28 size-12 font-medium rounded-lg border-2 border-white bg-transparent flex items-center justify-center gap-2 transition-all hover:scale-95"
               >
                 <PhHeart :size="18" weight="fill" />
-                <span @click="handleFavoriteMovieSave">Salvar</span>
+                <span @click="handleFavoriteSerieSave">Salvar</span>
               </button>
             </div>
           </div>

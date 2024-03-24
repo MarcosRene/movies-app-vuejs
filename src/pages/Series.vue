@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 
 import Loader from '../components/Loader.vue'
-import SeriesCard from '../components/SeriesCard.vue'
+import Card from '../components/Card.vue'
 
 import { API_KEY } from '../constants'
 
@@ -14,7 +14,7 @@ async function fetchMoviesTvData() {
     isLoading.value = true
 
     const response = await fetch(
-      `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=pt-BR`
+      `https://api.themoviedb.org/3/trending/tv/day?api_key=${API_KEY}&language=pt-BR`
     )
 
     const data = await response.json()
@@ -22,6 +22,7 @@ async function fetchMoviesTvData() {
       ...item,
       poster_path: `https://image.tmdb.org/t/p/original${item.poster_path}`,
     }))
+
   } catch (error) {
     console.error(error)
   } finally {
@@ -42,7 +43,7 @@ onMounted(() => fetchMoviesTvData())
         :key="serie.id"
         class="transition-transform transform hover:-translate-y-2"
       >
-        <SeriesCard :serie="serie" />
+        <Card :data="serie" />
       </li>
     </ul>
   </section>

@@ -14,7 +14,7 @@ async function fetchMoviesData() {
     isLoading.value = true
 
     const response = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=pt-BR`
+      `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}&language=pt-BR`
     )
 
     const data = await response.json()
@@ -42,7 +42,7 @@ onMounted(() => fetchMoviesData())
         :key="movie.id"
         class="transition-transform transform hover:-translate-y-2"
       >
-        <Card :movie="movie" />
+        <Card :data="movie" />
       </li>
     </ul>
   </section>

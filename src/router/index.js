@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const Home = () => import('../views/Home.vue')
-const Movies = () => import('../views/Movies.vue')
-const Series = () => import('../views/Series.vue')
-const Favorites = () => import('../views/Favorites.vue')
-const Details = () => import('../views/Details.vue')
-const SeriesDetails = () => import('../views/SeriesDetails.vue')
+const Home = () => import('../pages/Home.vue')
+const Movies = () => import('../pages/Movies.vue')
+const Series = () => import('../pages/Series.vue')
+const Favorites = () => import('../pages/Favorites.vue')
+const Details = () => import('../pages/Details.vue')
+const SeriesDetails = () => import('../pages/SeriesDetails.vue')
 
 const routes = [
   { path: '/', component: Home },

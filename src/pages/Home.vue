@@ -41,7 +41,7 @@ onMounted(() => fetchAllMoviesData())
         v-for="movie in movies"
         :key="movie.id"
       >
-        <Card :movie="movie" />
+        <Card :data="movie" />
       </li>
     </ul>
   </section>

@@ -1,21 +1,21 @@
 <script setup>
 import { PhTrashSimple } from '@phosphor-icons/vue'
 
-function generateLink(movie) {
-  if (!movie?.media_type) {
-    return '/movie/' + movie.id
+function generateLink(data) {
+  if (!data?.media_type) {
+    return `/movie/${data?.id}`
   }
 
   const mediaType = {
-    movie: '/movie/' + movie.id,
-    tv: '/serie/' + movie.id
+    movie: `/movie/${data.id}`,
+    tv: `/serie/${data.id}`
   }
 
-  return mediaType[movie.media_type]
+  return mediaType[data.media_type]
 }
 
 defineProps({
-  movie: {
+  data: {
     type: Object,
     required: true,
   },
@@ -26,16 +26,16 @@ defineProps({
 </script>
 
 <template>
-  <router-link :to="generateLink(movie)">
+  <router-link :to="generateLink(data)">
     <div
       class="overflow-hidden rounded-xl transition-transform transform hover:-translate-y-2"
     >
-      <img :src="movie?.poster_path" class="object-cover" />
+      <img :src="data?.poster_path" class="object-cover" />
     </div>
   </router-link>
   <button
     v-if="!!onRemove"
-    @click="() => onRemove(movie?.id)"
+    @click="() => onRemove(data?.id)"
     class="min-w-28 h-12 px-4 mt-4 font-medium bg-red-600 rounded-lg flex items-center justify-center gap-2 hover:bg-red-700 transition-all hover:scale-95"
   >
     <PhTrashSimple :size="18" weight="fill" class="flex-shrink-0" />
