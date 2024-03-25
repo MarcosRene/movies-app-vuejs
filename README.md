@@ -29,4 +29,6 @@ npm install
 npm run dev
 ```
 
-> Nota: A aplicação não conta com de paginação.
+> Nota: Para ter o funcionando correto da aplicação, você deve entrar na dashboard do site themoviedb e obter sua chave acessoa a api e em seguida adicionar sua chave no arquivo `.env` na variável ambiente `VITE_TMDB_API_KEY=sua_chave_aqui`.
+
+> Nota: A aplicação não conta com recurso de paginação.

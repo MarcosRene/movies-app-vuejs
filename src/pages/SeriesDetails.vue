@@ -6,8 +6,6 @@ import { PhHeart, PhPlay } from '@phosphor-icons/vue'
 
 import Loader from '../components/Loader.vue'
 
-import { API_KEY } from '../constants'
-
 const { params } = useRoute()
 
 const { id: serieId } = params
@@ -25,7 +23,7 @@ async function fetchSerieById() {
     isLoading.value = true
 
     const response = await fetch(
-      `https://api.themoviedb.org/3/tv/${serieId}?api_key=${API_KEY}&language=pt-BR`
+      `https://api.themoviedb.org/3/tv/${serieId}?api_key=${import.meta.env.VITE_TMBD_API_KEY}&language=pt-BR`
     )
 
     const data = await response.json()

@@ -4,8 +4,6 @@ import { ref, onMounted } from 'vue'
 import Card from '../components/Card.vue'
 import Loader from '../components/Loader.vue'
 
-import { API_KEY } from '../constants'
-
 const movies = ref([])
 const isLoading = ref(false)
 
@@ -14,7 +12,7 @@ async function fetchAllMoviesData() {
     isLoading.value = true
 
     const response = await fetch(
-    `https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}&language=pt-BR`
+    `https://api.themoviedb.org/3/trending/all/day?api_key=${import.meta.env.VITE_TMBD_API_KEY}&language=pt-BR`
   )
 
     const data = await response.json()
