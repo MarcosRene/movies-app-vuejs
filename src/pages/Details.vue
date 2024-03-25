@@ -95,10 +95,7 @@ onMounted(() => {
     v-else="!isLoading"
     class="h-screen bg-cover bg-no-repeat [background-position:center] md:[background-position:top]"
     :style="{
-      backgroundImage:
-        'linear-gradient(to right, black, rgba(0, 0, 0, 0.5)), url(' +
-        movie?.backdrop_path +
-        ')',
+      backgroundImage: `linear-gradient(to right, black, rgba(0, 0, 0, 0.5)), url(${movie?.backdrop_path})`
     }"
   >
     <div
@@ -139,12 +136,13 @@ onMounted(() => {
             </ul>
 
             <div className="mb-8 flex gap-4 order-1 md:mb-0 md:order-2">
-              <button
-                class="min-w-28 size-12 font-medium rounded-lg bg-red-600 flex items-center justify-center gap-2 hover:bg-red-700 transition-all hover:scale-95"
+              <a class="min-w-28 size-12 font-medium rounded-lg bg-red-600 flex items-center justify-center gap-2 hover:bg-red-700 transition-all hover:scale-95"
+                :href="`https://www.youtube.com/results?search_query=${movie.title} Trailer`"
+                target="_blank"
               >
                 <PhPlay :size="18" weight="fill" />
                 <span>Trailer</span>
-              </button>
+              </a>
               <button
                 class="min-w-28 size-12 font-medium rounded-lg border-2 border-white bg-transparent flex items-center justify-center gap-2 transition-all hover:scale-95"
               >
