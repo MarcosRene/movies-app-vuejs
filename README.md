@@ -29,4 +29,4 @@ npm install
 npm run dev
 ```
 
-> Nota: A aplicação não conta com recursos de assistir trailer e de paginação.
+> Nota: A aplicação não conta com de paginação.
